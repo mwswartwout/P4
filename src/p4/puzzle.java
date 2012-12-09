@@ -278,7 +278,7 @@ public class puzzle
             currentPuz = queue.poll();
             System.out.println("queue polled");
             
-            if (upChild(currentPuz) != null)
+            if (upChild(currentPuz).getPuzzle() != null)
             {
                 System.out.println("up child not null");
                 
@@ -298,14 +298,14 @@ public class puzzle
             
             System.out.println("up child check complete");
             
-            if (downChild(currentPuz).getPieces() != null)
+            if (downChild(currentPuz).getPuzzle() != null)
             {
-                if (Arrays.deepEquals(downChild(currentPuz).getPieces(), solution.getPieces()))
+                if (Arrays.deepEquals(downChild(currentPuz).getPuzzle(), solution.getPuzzle()))
                 {
                     solved = true;
                 }
             
-                else if (!Arrays.deepEquals(downChild(currentPuz).getPieces(), initial.getPieces()))
+                else if (!Arrays.deepEquals(downChild(currentPuz).getPuzzle(), initial.getPuzzle()))
                 {
                     queue.add(downChild(currentPuz));
                 }
@@ -313,12 +313,12 @@ public class puzzle
             
             if (leftChild(currentPuz) != null)
             {
-                if (Arrays.deepEquals(leftChild(currentPuz).getPieces(), solution.getPieces()))
+                if (Arrays.deepEquals(leftChild(currentPuz).getPuzzle(), solution.getPuzzle()))
                 {
                     solved = true;
                 }
             
-                else if (!Arrays.deepEquals(leftChild(currentPuz).getPieces(), initial.getPieces()))
+                else if (!Arrays.deepEquals(leftChild(currentPuz).getPuzzle(), initial.getPuzzle()))
                 {
                     queue.add(leftChild(currentPuz));
                 }
@@ -326,12 +326,12 @@ public class puzzle
             
             if (rightChild(currentPuz) != null)
             {
-                if (Arrays.deepEquals(rightChild(currentPuz).getPieces(), solution.getPieces()))
+                if (Arrays.deepEquals(rightChild(currentPuz).getPuzzle(), solution.getPuzzle()))
                 {
                     solved = true;
                 }
             
-                else if (!Arrays.deepEquals(rightChild(currentPuz).getPieces(), initial.getPieces()))
+                else if (!Arrays.deepEquals(rightChild(currentPuz).getPuzzle(), initial.getPuzzle()))
                 {
                     queue.add(rightChild(currentPuz));
                 }
@@ -347,6 +347,49 @@ public class puzzle
             {
                 currentPuz = currentPuz.getParent();
                 currentPuz.print();
+            }
+        }
+    }
+    
+    public void depthFirstSearch(puzzle puz, puzzle initial, int n)
+    {
+        int count = n;
+        
+        puzzle solution = new puzzle();
+        
+        if (Arrays.deepEquals(puz.getPuzzle(), solution.getPuzzle()))
+        {
+            System.out.println("Solution found");
+            puz.print();
+        
+            while( puz.getParent() != null)
+            {
+                puz = puz.getParent();
+                puz.print();
+            }
+        }
+        
+        else if (n <= 5 && (!Arrays.deepEquals(puz.getPuzzle(), initial.getPuzzle()) || n == 0))
+        {
+            if (upChild(puz) != null)
+            {
+                depthFirstSearch(upChild(puz), initial, count++);
+            }
+            
+            if (downChild(puz) != null)
+            {
+                //System.out.println
+                depthFirstSearch(downChild(puz), initial, count++);
+            }
+            
+            if (leftChild(puz) != null)
+            {
+                depthFirstSearch(leftChild(puz), initial, count++);
+            }
+            
+            if (rightChild(puz) != null)
+            {
+                  depthFirstSearch(rightChild(puz), initial, count++);      
             }
         }
     }
